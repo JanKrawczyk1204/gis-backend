@@ -28,6 +28,8 @@ To configure an FTP server for file management, use the following command:
 docker run -d --name ftp -p 8001:21 -p 21000-21010:21000-21010 -e USERS="sklep|12345678|/home/sklep|10000" delfer/alpine-ftp-server
 ```
 
+---
+
 This project is based on [this](https://gitlab.com/udemycourses3053026/projekt-wspolny-be) repository, with several key changes and feature enhancements.
 
 ---
