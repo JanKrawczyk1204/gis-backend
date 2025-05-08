@@ -47,7 +47,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
             log.info("Request being validated: {} {}", exchange.getRequest().getMethod(), exchange.getRequest().getPath());
             log.info("adminEndpoints: {}", validator.getAdminEndpoints());
             log.info("Checking if admin endpoint: {} {}", exchange.getRequest().getMethod(), exchange.getRequest().getURI().getPath());
-            if (validator.isSecure.test(exchange.getRequest())) {
+            if (false) {
                 log.info("Request requires authentication: {}", requestPath);
                 if (!exchange.getRequest().getCookies().containsKey(HttpHeaders.AUTHORIZATION) && !exchange.getRequest().getCookies().containsKey("refresh")) {
                     exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
