@@ -94,18 +94,18 @@ public class AuthController {
         }
     }
 
-    @RequestMapping(path = "/activate", method = RequestMethod.GET)
-    public ResponseEntity<AuthResponse> activateUser(@RequestParam String uid) {
-        try {
-            log.info("--START activateUser");
-            userService.activateUser(uid);
-            log.info("--STOP activateUser");
-            return ResponseEntity.ok(new AuthResponse(Code.SUCCESS));
-        } catch (UserDoesntExistException e) {
-            log.info("User doesn't exist in database");
-            return ResponseEntity.status(400).body(new AuthResponse(Code.A6));
-        }
-    }
+//    @RequestMapping(path = "/activate", method = RequestMethod.GET)
+//    public ResponseEntity<AuthResponse> activateUser(@RequestParam String uid) {
+//        try {
+//            log.info("--START activateUser");
+//            userService.activateUser(uid);
+//            log.info("--STOP activateUser");
+//            return ResponseEntity.ok(new AuthResponse(Code.SUCCESS));
+//        } catch (UserDoesntExistException e) {
+//            log.info("User doesn't exist in database");
+//            return ResponseEntity.status(400).body(new AuthResponse(Code.A6));
+//        }
+//    }
 
     @RequestMapping(path = "/deactivate", method = RequestMethod.PATCH)
     public ResponseEntity<AuthResponse> deactivateUser(HttpServletRequest request) {

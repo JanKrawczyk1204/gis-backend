@@ -12,7 +12,7 @@ CREATE TABLE "users" (
                          phone       VARCHAR,
                          city        VARCHAR,
                          street      VARCHAR,
-                         apartment   VARCHAR,
+                         number      VARCHAR,
                          postalcode  VARCHAR,
                          iscompany   BOOLEAN DEFAULT FALSE,
                          companyname VARCHAR,

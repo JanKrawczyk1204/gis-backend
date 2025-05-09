@@ -151,15 +151,15 @@ public class UserService {
             throw new UserExistingWithMail("Users alredy exist with this mail");
         });
         User user = new User();
-        user.setLock(true);
-        user.setEnabled(false);
+        user.setLock(false);
+        user.setEnabled(true);
         user.setLogin(userRegisterDTO.getLogin());
         user.setPassword(userRegisterDTO.getPassword());
         user.setEmail(userRegisterDTO.getEmail());
         user.setRole(Role.USER);
 
         saveUser(user);
-        emailService.sendActivation(user);
+//        emailService.sendActivation(user);
     }
 
     public ResponseEntity<?> login(HttpServletResponse response, User authRequest) {

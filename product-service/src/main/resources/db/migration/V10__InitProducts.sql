@@ -26,8 +26,8 @@ CREATE TABLE products
 ALTER TABLE products ADD CONSTRAINT unique_uid UNIQUE (uid);
 
 CREATE TABLE user_favourites (
-                                 user_uuid BIGINT NOT NULL,
-                                 product_uuid BIGINT NOT NULL,
+                                 user_uuid VARCHAR NOT NULL,
+                                 product_uuid VARCHAR NOT NULL,
                                  PRIMARY KEY (user_uuid, product_uuid),
                                  FOREIGN KEY (user_uuid) REFERENCES users(uuid),
                                  FOREIGN KEY (product_uuid) REFERENCES products(uid)
