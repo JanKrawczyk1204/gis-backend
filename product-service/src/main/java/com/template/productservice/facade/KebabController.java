@@ -8,9 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/api/v1/product")
+@RequestMapping(value = "/api/v1/kebab")
 @RequiredArgsConstructor
-public class ProductController {
+public class KebabController {
 
     private final ProductMediator productMediator;
     private final ProductService productService;
