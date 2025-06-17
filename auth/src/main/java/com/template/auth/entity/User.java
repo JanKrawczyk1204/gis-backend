@@ -1,6 +1,5 @@
 package com.template.auth.entity;
 
-import com.template.productservice.entity.ProductEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

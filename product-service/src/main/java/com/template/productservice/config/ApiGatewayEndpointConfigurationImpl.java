@@ -25,20 +25,12 @@ public class ApiGatewayEndpointConfigurationImpl implements ApiGatewayEndpointCo
 
     @Override
     public void initMap() {
-        endpointList.add(new Endpoint("/api/v1/product", HttpMethod.GET, Role.GUEST));
-        endpointList.add(new Endpoint("/api/v1/product/getExternal", HttpMethod.GET, Role.GUEST));
-        endpointList.add(new Endpoint("/api/v1/product/priority", HttpMethod.PATCH, Role.ADMIN));
-        endpointList.add(new Endpoint("/api/v1/product/discount", HttpMethod.PATCH, Role.ADMIN));
-        endpointList.add(new Endpoint("/api/v1/product/{uuid}", HttpMethod.GET, Role.ADMIN));
-        endpointList.add(new Endpoint("/api/v1/product", HttpMethod.POST, Role.ADMIN));
-        endpointList.add(new Endpoint("/api/v1/product", HttpMethod.DELETE, Role.ADMIN));
-        endpointList.add(new Endpoint("/api/v1/category", HttpMethod.GET, Role.GUEST));
-        endpointList.add(new Endpoint("/api/v1/category", HttpMethod.POST, Role.ADMIN));
-        endpointList.add(new Endpoint("/api/v1/transactions", HttpMethod.GET, Role.ADMIN));
-        endpointList.add(new Endpoint("/api/v1/transactions/items", HttpMethod.GET, Role.ADMIN));
-        endpointList.add(new Endpoint("/api/v1/transactions/products", HttpMethod.GET, Role.ADMIN));
-        endpointList.add(new Endpoint("/api/v1/transactions/order-details", HttpMethod.GET, Role.ADMIN));
-        endpointList.add(new Endpoint("/api/v1/transactions/users", HttpMethod.GET, Role.ADMIN));
+        endpointList.add(new Endpoint("/api/v1/kebab", HttpMethod.POST, Role.GUEST));
+        endpointList.add(new Endpoint("/api/v1/review", HttpMethod.POST, Role.GUEST));
+        endpointList.add(new Endpoint("/api/v1/review/kebab/**", HttpMethod.GET, Role.GUEST));
+        endpointList.add(new Endpoint("/api/v1/review/user/**", HttpMethod.GET, Role.GUEST));
+        endpointList.add(new Endpoint("/api/v1/kebab", HttpMethod.GET, Role.GUEST));
+        endpointList.add(new Endpoint("/api/v1/kebab/search", HttpMethod.GET, Role.GUEST));
     }
 
     @Override
