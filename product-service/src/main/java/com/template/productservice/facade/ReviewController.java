@@ -1,6 +1,7 @@
-package com.template.productservice.controller;
+package com.template.productservice.facade;
 
 import com.template.productservice.entity.ReviewDTO;
+import com.template.productservice.entity.ReviewInputDTO;
 import com.template.productservice.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,16 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping
-    public ResponseEntity<ReviewDTO> addReview(@RequestBody ReviewDTO dto) {
+    public ResponseEntity<ReviewDTO> addReview(@RequestBody ReviewInputDTO input) {
+        ReviewDTO dto = new ReviewDTO();
+        dto.setContent(input.getContent());
+        dto.setRating(input.getRating());
+        dto.setKebabUid(input.getKebabUid());
+        dto.setUserUuid(input.getUserUuid());
+
         return ResponseEntity.ok(reviewService.addReview(dto));
     }
+
 
     @GetMapping("/kebab/{kebabUid}")
     public ResponseEntity<ReviewDTO> getReviewByKebab(@PathVariable String kebabUid) {
