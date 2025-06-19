@@ -94,33 +94,6 @@ public class AuthController {
         }
     }
 
-//    @RequestMapping(path = "/activate", method = RequestMethod.GET)
-//    public ResponseEntity<AuthResponse> activateUser(@RequestParam String uid) {
-//        try {
-//            log.info("--START activateUser");
-//            userService.activateUser(uid);
-//            log.info("--STOP activateUser");
-//            return ResponseEntity.ok(new AuthResponse(Code.SUCCESS));
-//        } catch (UserDoesntExistException e) {
-//            log.info("User doesn't exist in database");
-//            return ResponseEntity.status(400).body(new AuthResponse(Code.A6));
-//        }
-//    }
-
-    @RequestMapping(path = "/deactivate", method = RequestMethod.PATCH)
-    public ResponseEntity<AuthResponse> deactivateUser(HttpServletRequest request) {
-        try {
-            log.info("--START deactivateUser");
-            userService.deactivateUser(request);
-            log.info("--STOP deactivateUser");
-            log.info("Finally, the harvest can commence...");
-            return ResponseEntity.ok(new AuthResponse(Code.SUCCESS));
-        } catch (UserDoesntExistException e) {
-            log.info("User doesn't exist in database");
-            return ResponseEntity.status(400).body(new AuthResponse(Code.A6));
-        }
-    }
-
     @RequestMapping(path = "/reset-password", method = RequestMethod.POST)
     public ResponseEntity<AuthResponse> sendMailRecovery(@RequestBody ResetPasswordData resetPasswordData) {
         try {

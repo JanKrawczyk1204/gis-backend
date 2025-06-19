@@ -151,15 +151,12 @@ public class UserService {
             throw new UserExistingWithMail("Users alredy exist with this mail");
         });
         User user = new User();
-        user.setLock(false);
-        user.setEnabled(true);
         user.setLogin(userRegisterDTO.getLogin());
         user.setPassword(userRegisterDTO.getPassword());
         user.setEmail(userRegisterDTO.getEmail());
         user.setRole(Role.USER);
 
         saveUser(user);
-//        emailService.sendActivation(user);
     }
 
     public ResponseEntity<?> login(HttpServletResponse response, User authRequest) {
@@ -199,42 +196,6 @@ public class UserService {
 
         log.info("--STOP LoginService: User doesn't exist");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new AuthResponse(Code.A2));
-    }
-
-
-    public void setAsAdmin(UserRegisterDTO user) {
-        userRepository.findUserByLogin(user.getLogin()).ifPresent(value-> {
-            value.setRole(Role.ADMIN);
-            userRepository.save(value);
-        });
-    }
-
-    public void activateUser(String uuid) throws UserDoesntExistException {
-        User user = userRepository.findUserByUuid(uuid).orElse(null);
-
-        if (user != null) {
-            user.setLock(false);
-            user.setEnabled(true);
-            userRepository.save(user);
-            return;
-        }
-        throw new UserDoesntExistException("User doesn't exist");
-    }
-
-    public void deactivateUser(HttpServletRequest request) throws UserDoesntExistException {
-        String token = getTokenFromRequest(request);
-        String usernameOrEmail = jwtService.getSubject(token);
-
-        User user = userRepository.findUserByLoginOrEmailAndLockAndEnabled(usernameOrEmail)
-                .orElseThrow(() -> new UserDoesntExistException("User with username/email " + usernameOrEmail + " does not exist"));
-
-        if (user != null) {
-            user.setLock(true);
-            user.setEnabled(false);
-            userRepository.save(user);
-            return;
-        }
-        throw new UserDoesntExistException("User doesn't exist");
     }
 
     public void recoverPassword(String email) throws UserDoesntExistException {
@@ -294,112 +255,6 @@ public class UserService {
             throw new IllegalArgumentException("Token cannot be null");
         }
     }
-
-    public void addShippingDetails(HttpServletRequest request, ShippingDetailsDTO shippingDetails) {
-        String subject = jwtService.getSubject(getTokenFromRequest(request));
-
-        User user = userRepository.findUserByLoginOrEmailAndLockAndEnabled(subject)
-                .orElseThrow(() -> new UserDoesntExistException("User with username/email " + subject + " does not exist"));
-
-        if (!user.isEnabled()) {
-            throw new UserNotEnabledException("User with UUID " + user.getUuid() + " is not enabled");
-        }
-
-        if (user.isLock()) {
-            throw new UserLockedException("User with UUID " + user.getUuid() + " is locked");
-        }
-
-        log.info("Shipping Details: {}", shippingDetails);
-
-        user.setFirstName(shippingDetails.getFirstName());
-        user.setLastName(shippingDetails.getLastName());
-        user.setPhone(shippingDetails.getPhone());
-        user.setCity(shippingDetails.getCity());
-        user.setStreet(shippingDetails.getStreet());
-        user.setApartmentNumber(shippingDetails.getApartmentNumber());
-        user.setPostalCode(shippingDetails.getPostalCode());
-        user.setCompany(shippingDetails.isCompany());
-        user.setCompanyName(shippingDetails.getCompanyName());
-        user.setNip(shippingDetails.getNip());
-
-        userRepository.save(user);
-    }
-
-    public UserDTO getUserProfile(HttpServletRequest request) {
-        String usernameOrEmail = jwtService.getSubject(getTokenFromRequest(request));
-
-        User user = userRepository.findUserByLoginOrEmailAndLockAndEnabled(usernameOrEmail)
-                .orElseThrow(() -> new UserDoesntExistException("User with username/email " + usernameOrEmail + " does not exist"));
-
-        return new UserDTO(
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getPhone(),
-                user.getCity(),
-                user.getStreet(),
-                user.getApartmentNumber(),
-                user.getPostalCode(),
-                user.isCompany(),
-                user.getCompanyName(),
-                user.getNip()
-        );
-    }
-
-    public String toggleFavourite(HttpServletRequest request, String productUid) {
-        String token = getTokenFromRequest(request);
-        String usernameOrEmail = jwtService.getSubject(token);
-
-        User user = userRepository.findUserByLoginOrEmailAndLockAndEnabled(usernameOrEmail)
-                .orElseThrow(() -> new UserDoesntExistException("User with username/email " + usernameOrEmail + " does not exist"));
-
-        List<String> favourites = user.getFavouriteProductUids();
-
-        if (favourites.contains(productUid)) {
-            favourites.remove(productUid);
-            userRepository.save(user);
-            return "Product removed from favourites";
-        } else {
-            favourites.add(productUid);
-            userRepository.save(user);
-            return "Product added to favourites";
-        }
-    }
-
-    public List<SimpleProductDTO> getFavouriteProducts(HttpServletRequest request) {
-        String token = getTokenFromRequest(request);
-        String usernameOrEmail = jwtService.getSubject(token);
-
-        User user = userRepository.findUserByLoginOrEmailAndLockAndEnabled(usernameOrEmail)
-                .orElseThrow(() -> new UserDoesntExistException("User with username/email " + usernameOrEmail + " does not exist"));
-
-        List<Object[]> results = entityManager.createNativeQuery("""
-        SELECT p.uid AS uid, p.product_name AS name, p.main_desc AS mainDesc, 
-               p.price AS price, i.uuid AS imageUuid, 
-               p.create_at AS createAt, p.discount AS discount, 
-               p.discounted_price AS discountedPrice
-        FROM products p
-        LEFT JOIN image_data i ON p.image_urls[1] = i.uuid
-        WHERE p.uid = ANY(:productUids)
-    """).setParameter("productUids", user.getFavouriteProductUids().toArray(new String[0]))
-                .getResultList();
-
-        String FILE_SERVICE = "http://localhost:8088/api/v1/image?uuid=";
-
-        return results.stream()
-                .map(result -> new SimpleProductDTO(
-                        (String) result[0],  // uid
-                        (String) result[1],  // name
-                        (String) result[2],  // mainDesc
-                        ((BigDecimal) result[3]).floatValue(),  // price
-                        FILE_SERVICE + result[4],  // image_url
-                        ((java.sql.Date) result[5]).toLocalDate(), // createAt
-                        (Boolean) result[6],  // discount
-                        result[7] != null ? ((BigDecimal) result[7]).floatValue() : null // discountedPrice
-                ))
-                .collect(Collectors.toList());
-    }
-
 
     private String getTokenFromRequest(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
