@@ -165,7 +165,6 @@ public class UserService {
         log.info("Authenticating user: " + authRequest.getUsername());
 
         User user = userRepository.findUserByLoginOrEmailAndLockAndEnabled(authRequest.getUsername()).orElse(null);
-        // log.info("User found: " + user);
 
         if (user != null) {
             Authentication authenticate = authenticationManager.authenticate(
