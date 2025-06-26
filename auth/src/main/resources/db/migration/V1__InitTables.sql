@@ -4,19 +4,7 @@ CREATE TABLE "users" (
                          login       VARCHAR NOT NULL,
                          email       VARCHAR NOT NULL,
                          password    VARCHAR NOT NULL,
-                         role        VARCHAR NOT NULL,
-                         isLock      BOOLEAN DEFAULT true,
-                         isEnabled   BOOLEAN DEFAULT false,
-                         firstname   VARCHAR,
-                         lastname    VARCHAR,
-                         phone       VARCHAR,
-                         city        VARCHAR,
-                         street      VARCHAR,
-                         number      VARCHAR,
-                         postalcode  VARCHAR,
-                         iscompany   BOOLEAN DEFAULT FALSE,
-                         companyname VARCHAR,
-                         nip         VARCHAR
+                         role        VARCHAR NOT NULL
 );
 
 ALTER TABLE users ADD CONSTRAINT unique_uuid UNIQUE (uuid);

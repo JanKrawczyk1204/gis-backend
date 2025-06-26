@@ -13,8 +13,8 @@ CREATE TABLE kebab
 CREATE TABLE review (
     id                 SERIAL PRIMARY KEY,
     uuid               VARCHAR NOT NULL UNIQUE,
-    kebab_id           INTEGER NOT NULL UNIQUE REFERENCES kebab(id) ON DELETE CASCADE,
-    user_id            INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    kebab_name         VARCHAR NOT NULL,
+    user_login         VARCHAR NOT NULL,
     content            TEXT NOT NULL,
     rating             DECIMAL(3,2) NOT NULL
 );

@@ -11,25 +11,14 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class UserEntity {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    @GeneratedValue(generator = "users_id_seq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "users_id_seq",sequenceName = "users_id_seq",allocationSize = 1)
+    private long id;
     private String uuid;
     private String login;
     private String email;
-    private String role;
-    private boolean isLock;
-    private boolean isEnabled;
-    private String firstname;
-    private String lastname;
-    private String phone;
-    private String city;
-    private String street;
-    private String number;
-    private String postalcode;
-    private boolean iscompany;
-    private String companyname;
-    private String nip;
+    private String password;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }

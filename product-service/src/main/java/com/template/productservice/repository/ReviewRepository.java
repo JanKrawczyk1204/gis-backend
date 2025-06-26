@@ -6,9 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
-    Optional<ReviewEntity> findByKebab_Uid(String kebabUid);
-    List<ReviewEntity> findAllByUser_Uuid(String userUuid);
+public interface ReviewRepository extends JpaRepository<ReviewEntity, UUID> {
+    List<ReviewEntity> findAllByKebabName(String kebabName);
 }
