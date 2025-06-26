@@ -1,6 +1,7 @@
 package com.template.productservice.facade;
 
 import com.template.productservice.entity.ReviewDTO;
+import com.template.productservice.entity.ReviewEntity;
 import com.template.productservice.entity.ReviewInputDTO;
 import com.template.productservice.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -18,23 +19,11 @@ public class ReviewController {
 
     @PostMapping
     public ResponseEntity<ReviewDTO> addReview(@RequestBody ReviewInputDTO input) {
-        ReviewDTO dto = new ReviewDTO();
-        dto.setContent(input.getContent());
-        dto.setRating(input.getRating());
-        dto.setKebabUid(input.getKebabUid());
-        dto.setUserUuid(input.getUserUuid());
-
-        return ResponseEntity.ok(reviewService.addReview(dto));
+        return ResponseEntity.ok(reviewService.addReview(input));
     }
 
-
-    @GetMapping("/kebab/{kebabUid}")
-    public ResponseEntity<ReviewDTO> getReviewByKebab(@PathVariable String kebabUid) {
-        return ResponseEntity.ok(reviewService.getReviewByKebab(kebabUid));
-    }
-
-    @GetMapping("/user/{userUuid}")
-    public ResponseEntity<List<ReviewDTO>> getReviewsByUser(@PathVariable String userUuid) {
-        return ResponseEntity.ok(reviewService.getReviewsByUser(userUuid));
+    @GetMapping("/kebab/{kebabName}")
+    public List<ReviewEntity> getReviewsByKebab(@PathVariable String kebabName) {
+        return reviewService.getReviewsByKebabName(kebabName);
     }
 }

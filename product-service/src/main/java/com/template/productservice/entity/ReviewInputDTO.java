@@ -12,7 +12,6 @@ import lombok.Setter;
 public class ReviewInputDTO {
     private String content;
     private float rating;
-    private String kebabUid;
-    private String userUuid;
+    private String kebabName;
+    private String userLogin;
 }
-

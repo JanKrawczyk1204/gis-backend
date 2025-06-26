@@ -1,25 +1,17 @@
 package com.template.productservice.entity;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
 public class UserDTO {
+    private long id;
     private String uuid;
     private String login;
     private String email;
+    private String password;
     private Role role;
-    private boolean isLock;
-    private boolean isEnabled;
-    private String firstName;
-    private String lastName;
-    private String phone;
-    private String city;
-    private String street;
-    private String apartmentNumber;
-    private String postalCode;
-    private boolean isCompany;
-    private String companyName;
-    private String nip;
 }

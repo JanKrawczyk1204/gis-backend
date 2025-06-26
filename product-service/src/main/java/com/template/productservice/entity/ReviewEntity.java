@@ -8,7 +8,7 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ReviewEntity extends Review {
+public class ReviewEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,17 +17,15 @@ public class ReviewEntity extends Review {
     @Column(nullable = false, unique = true)
     private String uuid;
 
+    @Column(name = "kebab_name", nullable = false)
+    private String kebabName;
+
+    @Column(name = "user_login", nullable = false)
+    private String userLogin;
+
     @Column(nullable = false)
     private String content;
 
     @Column(nullable = false)
     private float rating;
-
-    @OneToOne
-    @JoinColumn(name = "kebab_id", unique = true)
-    private KebabEntity kebab;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
 }

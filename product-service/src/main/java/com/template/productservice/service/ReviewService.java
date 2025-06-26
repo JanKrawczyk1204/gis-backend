@@ -17,39 +17,22 @@ import java.util.UUID;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
-    private final KebabRepository kebabRepository;
-    private final UserRepository userRepository;
 
     @Transactional
-    public ReviewDTO addReview(ReviewDTO dto) {
+    public ReviewDTO addReview(ReviewInputDTO input) {
         ReviewEntity review = new ReviewEntity();
         review.setUuid(UUID.randomUUID().toString());
-        review.setContent(dto.getContent());
-        review.setRating(dto.getRating());
-
-        KebabEntity kebab = kebabRepository.findByUid(dto.getKebabUid())
-                .orElseThrow(() -> new EntityNotFoundException("Kebab not found"));
-
-        UserEntity user = userRepository.findByUuid(dto.getUserUuid())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-
-        review.setKebab(kebab);
-        review.setUser(user);
+        review.setContent(input.getContent());
+        review.setRating(input.getRating());
+        review.setKebabName(input.getKebabName());
+        review.setUserLogin(input.getUserLogin());
 
         ReviewEntity saved = reviewRepository.save(review);
         return toDTO(saved);
     }
 
-    public List<ReviewDTO> getReviewsByUser(String userUuid) {
-        return reviewRepository.findAllByUser_Uuid(userUuid).stream()
-                .map(this::toDTO)
-                .toList();
-    }
-
-    public ReviewDTO getReviewByKebab(String kebabUid) {
-        return reviewRepository.findByKebab_Uid(kebabUid)
-                .map(this::toDTO)
-                .orElseThrow(() -> new EntityNotFoundException("Review not found for kebab: " + kebabUid));
+    public List<ReviewEntity> getReviewsByKebabName(String kebabName) {
+        return reviewRepository.findAllByKebabName(kebabName);
     }
 
     private ReviewDTO toDTO(ReviewEntity entity) {
@@ -57,8 +40,9 @@ public class ReviewService {
                 entity.getUuid(),
                 entity.getContent(),
                 entity.getRating(),
-                entity.getKebab().getUid(),
-                entity.getUser().getUuid()
+                entity.getKebabName(),
+                entity.getUserLogin()
         );
     }
 }
+
